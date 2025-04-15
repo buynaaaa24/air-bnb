@@ -5,7 +5,16 @@ import { useMemo, useState } from "react";
 import Heading from "../Heading";
 import { categories } from "../navbar/Categories";
 import CategoryInput from "../inputs/CategoryInput";
-import { FieldValue, FieldValues, useForm } from "react-hook-form";
+import { FieldValue, FieldValues, SubmitHandler, useForm } from "react-hook-form";
+import CountrySelect from "../inputs/CountrySelect";
+import dynamic from "next/dynamic";
+import Counter from "../inputs/Counter";
+import ImageUpload from "../inputs/ImageUpload";
+import Input from "../inputs/Input";
+import axios from "axios";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
+
 
 enum STEPS {
     CATEGORY = 0,
@@ -17,9 +26,11 @@ enum STEPS {
 }
 
 const RentModal = () => {
+    const router = useRouter();
     const rentModal = useRentModal();
 
-    const [step , setStep] = useState(STEPS.CATEGORY)
+    const [step , setStep] = useState(STEPS.CATEGORY);
+    const [isLoading, setIsLoading] = useState(false);
 
     const {
         register,
@@ -45,6 +56,15 @@ const RentModal = () => {
     });
 
     const category = watch('category');
+    const location = watch('location');
+    const guestCount = watch('guestCount');
+    const roomCount = watch('roomCount');
+    const bathroomCount = watch('bathroomCount');
+    const imageSrc = watch('imageSrc');
+
+    const Map = useMemo(() => dynamic(() => import('../Map'), {
+        ssr: false
+    }), [location]);
 
     const setCustomValue = (id: string, value : any) => {
         setValue(id, value, {
@@ -62,27 +82,50 @@ const RentModal = () => {
         setStep((value) => value + 1);
     }
 
-    const actionLabel = useMemo(() => {
-        if (step === STEPS.PRICE) {
-            return 'Create';
+    const onSubmit : SubmitHandler<FieldValues> = (data) => {
+        if (step !== STEPS.PRICE) {
+            return onNext();
         }
 
-        return 'Next';
-    }, []);
+        setIsLoading(true);
+
+        axios.post('/api/listings', data)
+        .then(() => {
+            toast.success('Амжилттай бүртгэгдлээ!');
+            router.refresh();
+            reset();
+            setStep(STEPS.CATEGORY);
+            rentModal.onClose();
+        })
+        .catch(() => {
+            toast.error('Бүртгэгдсэнгүй.');
+        }).finally(() => {
+            setIsLoading(false);
+        })        
+
+    }
+
+    const actionLabel = useMemo(() => {
+        if (step === STEPS.PRICE) {
+            return 'Үүсгэх';
+        }
+
+        return 'Дараах';
+    }, [step]);
 
     const secondaryActionLabel = useMemo(() => {
         if(step ===STEPS.CATEGORY) {
             return undefined;
         }
 
-        return 'Back';
+        return 'Буцах';
     },[step]);
 
     let bodyContent = (
         <div className="flex flex-col gap-8">
             <Heading
-                title="Which of these best describes your place?"
-                subtitle="Pick a category"
+                title="Эдгээрийн аль нь таны байрыг хамгийн сайн тодорхойлж байна вэ?"
+                subtitle="Ангилал сонгоно уу"
             />
             <div 
                 className="
@@ -109,15 +152,128 @@ const RentModal = () => {
         </div>
     )
 
+    if (step === STEPS.LOCATION) {
+        bodyContent = (
+            <div className="flex flex-col gap-8">
+                <Heading
+                    title="Танай байр хаана байрладаг вэ?"
+                    subtitle="Таны байрыг олоход тусална уу!"
+                    />
+                    <CountrySelect
+                        value={location}
+                        onChange={(value) => setCustomValue('location', value)}
+                    />
+            <Map
+                center={location?.latlng} 
+            />
+            </div>
+        )
+    }
+
+    if(step === STEPS.INFO) {
+        bodyContent = (
+            <div className="flex flex-col gap-8">
+                <Heading
+                    title="Үндсэн мэдээлэл"
+                    subtitle="Онцлох зүйлс юу вэ?"
+                />
+                <Counter
+                    title="Хүний тоо"
+                    subtitle="Хэр их хүн байхад тохиромжтой вэ?"
+                    value={guestCount}
+                    onChange={(value) => setCustomValue('guestCount', value)}
+                />
+                <hr />
+                <Counter
+                    title="Өрөөний тоо"
+                    subtitle="Хэдэн өрөөтэй вэ?"
+                    value={roomCount}
+                    onChange={(value) => setCustomValue('roomCount', value)}
+                />
+                <hr />
+                <Counter
+                    title="Ариун цэврийн өрөө"
+                    subtitle="Хэдэн ариун цэврийн өрөөтэй вэ?"
+                    value={bathroomCount}
+                    onChange={(value) => setCustomValue('bathroomCount', value)}
+                />
+            </div>
+        )
+    }
+
+        if(step === STEPS.IMAGES) {
+            bodyContent = (
+                <div className="flex flex-col gap-8">
+                    <Heading
+                        title="Гэрийнхээ зургийг оруулна уу"
+                        subtitle="Танайхийг илтгэх зургууд!"
+                    />
+                    <ImageUpload
+                        value={imageSrc}
+                        onChange={(value) => setCustomValue('imageSrc', value)}
+                    />
+                </div>
+            )
+        }
+        
+        if (step === STEPS.DESCRIPTION) {
+            bodyContent = (
+                <div className="flex flex-col gap-8">
+                    <Heading
+                        title="Та өөрийн гэрээ тодорхой дүрсэлвэл?"
+                        subtitle="Товч, тодорхой байвал сайн!"
+                    />
+                    <Input
+                        id="title"
+                        label="Title"
+                        disabled={isLoading}
+                        register={register}
+                        errors={errors}
+                        required
+                    /> 
+                    <hr />
+                    <Input
+                        id="description"
+                        label="Description"
+                        disabled={isLoading}
+                        register={register}
+                        errors={errors}
+                        required
+                    /> 
+                </div>
+            )
+        }
+
+        if (step === STEPS.PRICE) {
+            bodyContent = (
+                <div className="flex flex-col gap-8">
+                    <Heading
+                        title="Түрээслэх үнэ"
+                        subtitle="Түрээслэх үнээ бичнэ үү?"
+                    />
+                    <Input
+                       id="price"
+                       label="Price"
+                       formatPrice={true}
+                       type="number"
+                       disabled={isLoading}
+                       register={register}
+                       errors={errors}
+                       required
+                    />
+                </div>
+            )
+        }
+
     return (
         <Modal
         isOpen={rentModal.isOpen}
         onClose={rentModal.onClose}
-        onSubmit={rentModal.onClose}
+        onSubmit={handleSubmit(onSubmit)}
         actionLabel={actionLabel}
         secondaryActionLabel={secondaryActionLabel}
         secondaryAction={step === STEPS.CATEGORY ? undefined : onBack}
-        title="AirBnb your home!"
+        title="Гэрээ түрээслүүлэх!"
         body={bodyContent}
         />
      );

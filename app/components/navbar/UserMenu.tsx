@@ -9,6 +9,7 @@ import useLoginModal from "@/app/hooks/useLoginModal";
 import { signOut } from "next-auth/react";
 import { SafeUser } from "@/app/types";
 import useRentModal from "@/app/hooks/useRentModal";
+import { useRouter } from "next/navigation";
 
 interface UsermenuProps {
     currentUser?: SafeUser | null
@@ -17,6 +18,7 @@ interface UsermenuProps {
 const UserMenu: React.FC<UsermenuProps> = ({
     currentUser
 }) => {
+    const router = useRouter();
     const registerModal = useRegisterModal();
     const loginModal = useLoginModal();
     const rentModal = useRentModal();
@@ -55,7 +57,7 @@ const UserMenu: React.FC<UsermenuProps> = ({
                     cursor-pointer
                     "
                 >
-                    Гэрээ түрээслүүл
+                    Гэрээ түрээслүүлэх
                 </div>
                 <div
                     onClick={toggleOpen}
@@ -101,19 +103,19 @@ const UserMenu: React.FC<UsermenuProps> = ({
                         {currentUser ? (
                             <>
                                 <MenuItem
-                                    onClick={() => {}}
-                                    label="Миний аялал"
+                                    onClick={() => router.push("/dashboard")}
+                                    label="Миний булан"
                                     />
                                 <MenuItem
-                                    onClick={() => {}}
-                                    label="Миний дуртай"
-                                    />
-                                <MenuItem
-                                    onClick={() => {}}
+                                    onClick={() => router.push("/trips")}
                                     label="Миний захиалга"
                                     />
                                 <MenuItem
-                                    onClick={() => {}}
+                                    onClick={() => router.push("/favourites")}
+                                    label="Надад таалагдсан"
+                                    />
+                                <MenuItem
+                                    onClick={() => router.push("/reservations")}
                                     label="Миний өмч"
                                     />
                                 <MenuItem
@@ -123,7 +125,7 @@ const UserMenu: React.FC<UsermenuProps> = ({
                                     <hr />
                                     <MenuItem
                                     onClick={() => signOut()}
-                                    label="Logout"
+                                    label="Гарах"
                                     />    
                                 </>
 

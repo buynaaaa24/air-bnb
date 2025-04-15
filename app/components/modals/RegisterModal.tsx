@@ -42,7 +42,9 @@ const RegisterModal = () => {
 
         axios.post('/api/register', data)
             .then(() => {
+                toast.success('Амжилттай!')
                 registerModal.onClose();
+                loginModal.onOpen();
             })
             .catch((error)=>{
                 toast.error('Буруу!!!');
@@ -73,7 +75,7 @@ const RegisterModal = () => {
                 required 
             />
             <Input
-                id="Нэр"
+                id="name"
                 label="Нэвтрэх нэр"
                 disabled={isLoading}
                 register={register}

@@ -3,11 +3,30 @@
 import { useParams, useRouter } from "next/navigation";
 import { useCallback } from "react";
 import { IconType } from "react-icons";
-import qs from "query-string"
+import qs from "query-string";
+
+// Mapping Mongolian labels to English labels
+const categoryLabelMap: Record<string, string> = {
+  'Далайн эрэг': 'Beach',
+  'Ферм': 'Farm',
+  'Орчин үеийн': 'Modern',
+  'Хөдөө': 'Countryside',
+  'Усан сан': 'Pool',
+  'Арал': 'Island',
+  'Гол': 'Lake',
+  'Зугаалга': 'Skiing',
+  'Цайз': 'Castle',
+  'Амралт': 'Camping',
+  'Арктик': 'Arctic',
+  'Агуй': 'Cave',
+  'Цөл': 'Desert',
+  'Амбаар': 'Barn',
+  'Люкс': 'Luxury',
+};
 
 interface CategoryBoxProps {
     icon: IconType;
-    label:string;
+    label: string;
     selected?: boolean;
 }
 
@@ -20,29 +39,34 @@ const CategoryBox: React.FC<CategoryBoxProps> = ({
     const params = useParams();
 
     const handleClick = useCallback(() => {
+        // Convert Mongolian label to English for the URL
+        const englishLabel = categoryLabelMap[label] || label;
+
         let currentQuery = {};
 
         if (params) {
             currentQuery = qs.parse(params.toString());
         }
 
-        const updatedQuery: any ={
-            ... currentQuery,
-            category: label
-        }
+        const updatedQuery: any = {
+            ...currentQuery,
+            category: englishLabel
+        };
 
-        if (params?.category === label) {  
+        // If the category is already selected, remove it from the query
+        if (params?.category === englishLabel) {
             delete updatedQuery.category;
         }
-        
+
         const url = qs.stringifyUrl({
             url: '/',
             query: updatedQuery
-        }, { skipNull: true});
+        }, { skipNull: true });
 
         router.push(url);
     }, [label, params, router]);
-    return(
+
+    return (
         <div
             onClick={handleClick}
             className={`

@@ -12,79 +12,79 @@ import { IoDiamond } from "react-icons/io5";
 
 export const categories = [
     {
-        label: 'Beach',
+        label: 'Далайн эрэг',
         icon: TbBeach,
-        description: 'This property is close to the beach!'
+        description: 'Энэ үл хөдлөх хөрөнгө нь далайн эрэгт ойрхон!'
     },
     {
-        label: 'Windmills',
-        icon: GiWindmill,
-        description: 'This property has windmills!'
+        label: 'Ферм',
+        icon: GiWindmill    ,
+        description: 'Энэ байшин салхин тээрэмтэй!'
     },
     {
-        label: 'Modern',
+        label: 'Орчин үеийн',
         icon: MdOutlineVilla,
-        description: 'This property is modern!'
+        description: 'Энэ өмч нь орчин үеийн шийдэлтэй!'
     },
     {
-        label: 'Countryside',
+        label: 'Хөдөө',
         icon: TbMountain,
-        description: 'This property is in countryside!'
+        description: 'Энэ өмч нь хөдөө байдаг!'
     },
     {
-        label: 'Pools',
+        label: 'Усан сан',
         icon: TbPool,
-        description: 'This property has pool!'
+        description: 'Энэ байшин усан сантай!'
     },
     {
-        label: 'islands',
+        label: 'Арал',
         icon: GiIsland,
-        description: 'This property is on island!'
+        description: 'Энэ үл хөдлөх хөрөнгө арал дээр байдаг!'
     },
     {
-        label: 'Lake',
+        label: 'Гол',
         icon: GiBoatFishing,
-        description: 'This property is close to a lake!'
+        description: 'Энэ байшин голтой ойрхон!'
     },
     {
-        label: 'Skiing',
+        label: 'Зугаалга',
         icon: FaSkiing,
-        description: 'This property has skiing activities!'
+        description: 'Энэ газар олон үйл ажиллагаа хийх боломжтой!'
     },
     {
-        label: 'Castles',
+        label: 'Цайз',
         icon: GiCastle,
-        description: 'This property is in a castle!'
+        description: 'Энэ үл хөдлөх хөрөнгө нь цайзад байдаг!'
     },
     {
-        label: 'Camping',
+        label: 'Амралт',
         icon: GiForestCamp,
-        description: 'This property has camping activities!'
+        description: 'Энэ газар кемп хийж болно!'
     },
     {
-        label: 'Arctic',
+        label: 'Арктик',
         icon: BsSnow,
-        description: 'This property is in arctic!'
+        description: 'Энэ өмч нь Антарктикт байдаг!'
     },
     {
-        label: 'Cave',
+        label: 'Агуй',
         icon: GiCaveEntrance,
-        description: 'This property is in cave!'
+        description: 'Агуйд байрласан байшин!'
     },
     {
-        label: 'Desert',
+        label: 'Цөл',
         icon: GiCactus,
-        description: 'This property is in the desert!'
+        description: 'Энэ байшин цөлд байдаг!'
     },
     {
-        label: 'Barns',
+        label: 'Амбаар',
         icon: GiBarn,
-        description: 'This property is in the barn!'
+        description: 'Амбаартай байшин!'
     },
     {
-        label: 'Lux',
+        label: 'Люкс',
         icon: IoDiamond,
-        description: 'This property is luxurious!'
+        description: 'Тансаг зэрэглэлийн!'
     },
 ]
 
