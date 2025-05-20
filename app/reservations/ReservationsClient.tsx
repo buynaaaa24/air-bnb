@@ -1,9 +1,7 @@
 'use client';
 
-import { toast} from "react-hot-toast";
-import axios from "axios";
-import { useCallback, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 import { safeReservation, SafeUser } from "../types";
 
@@ -14,7 +12,6 @@ import ListingCard from "../components/listings/ListingCard";
 interface ReservationsClientProps {
     reservations: safeReservation[];
     currentUser?: SafeUser | null;
-    
 }
 
 const ReservationsClient: React.FC<ReservationsClientProps> = ({
@@ -22,60 +19,49 @@ const ReservationsClient: React.FC<ReservationsClientProps> = ({
     currentUser
 }) => {
     const router = useRouter();
-    const [deletingId, setDeletingId] = useState('');
+    const [loadingId, setLoadingId] = useState('');
 
-    const onCancel = useCallback((id: string) => {
-        setDeletingId(id);
-
-        axios.delete(`/api/reservations/${id}`)
-        .then(() => {
-            toast.success("Захиалга цуцлагдлаа");
-            router.refresh();
-        })
-        .catch(()=> {
-            toast.error('Something went wrong.');
-        })
-        .finally(() => {
-            setDeletingId('');
-        })
-    }, [router]);
+    const onSeeMore = (id: string) => {
+        setLoadingId(id);
+        router.push('/dashboard'); // Change to your actual dashboard route if needed
+    };
 
     return (
         <Container>
             <div className="p-8">
-            <Heading
-                title="Захиалгууд"
-                subtitle="Таны захиалагдсан байрууд"
-            />
-            <div
-                className="
-                    mt-10
-                    grid
-                    grid-cols-1
-                    sm:grid-cols-2
-                    md:grid-cols-3
-                    lg:grid-cols-4
-                    xl:grid-cols-5
-                    2xl:grid-cols-6
-                    gap-8
-                "
-            >
-                {reservations.map((reservation) => (
-                    <ListingCard
-                        key={reservation.id}
-                        data={reservation.listing}
-                        reservation={reservation}
-                        actionId={reservation.id}
-                        onAction={onCancel}
-                        disabled={deletingId === reservation.id}
-                        actionLabel="Зочдын захиалгийг цуцлах"
-                        currentUser={currentUser}
-                    />
-                ))}
-            </div>
+                <Heading
+                    title="Захиалгууд"
+                    subtitle="Таны захиалагдсан байрууд"
+                />
+                <div
+                    className="
+                        mt-10
+                        grid
+                        grid-cols-1
+                        sm:grid-cols-2
+                        md:grid-cols-3
+                        lg:grid-cols-4
+                        xl:grid-cols-5
+                        2xl:grid-cols-6
+                        gap-8
+                    "
+                >
+                    {reservations.map((reservation) => (
+                        <ListingCard
+                            key={reservation.id}
+                            data={reservation.listing}
+                            reservation={reservation}
+                            actionId={reservation.id}
+                            onAction={onSeeMore}
+                            disabled={loadingId === reservation.id}
+                            actionLabel="Дэлгэрэнгүй харах"
+                            currentUser={currentUser}
+                        />
+                    ))}
+                </div>
             </div>
         </Container>
     );
-}
+};
 
 export default ReservationsClient;
