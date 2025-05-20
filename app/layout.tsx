@@ -13,7 +13,7 @@ import SearchModal from "./components/modals/searchModal";
 
 export const metadata: Metadata = {
   title: "MUST State",
-  description: "Airbnb clone",
+  description: "Diplomiin ajil",
 };
 
 const font = Nunito({
@@ -29,7 +29,14 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
-      <body className={font.className}>
+      <body
+        className={font.className}
+        style={{
+          background: "white",
+          backgroundImage: "linear-gradient(90deg, #e3ffe7 0%, #d9e7ff 100%)",
+          minHeight: "100vh",
+        }}
+      >
         <ClientOnly>
           <ToasterProvider />
           <SearchModal />
@@ -41,6 +48,9 @@ export default async function RootLayout({
         <div className="pb-20 pt-28">
           {children}
         </div>
+        <footer className="w-full text-center py-4 text-sm text-neutral-600 border-t mt-8">
+          Бичсэн: Ариунбуян © 2025
+        </footer>
       </body>
     </html>
   );

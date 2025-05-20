@@ -8,6 +8,7 @@ interface ButtonProps {
     disabled?: boolean;
     outline?: boolean;
     small?: boolean;
+    className?: string;
     icon?: IconType;
 }
 

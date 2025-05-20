@@ -9,7 +9,10 @@ export interface IListingsParams {
     endDate?: string;
     locationValue?: string;
     category?: string;
+    minPrice?: number;   // ADD
+    maxPrice?: number;   // ADD
 }
+
 
 export default async function getListings(
     params: IListingsParams
@@ -23,7 +26,9 @@ export default async function getListings(
             locationValue,
             startDate,
             endDate,
-            category
+            category,
+            minPrice, // 👈 added
+            maxPrice, // 👈 added
          } = params;
 
         let query: any = {};
@@ -39,19 +44,19 @@ export default async function getListings(
         if (roomCount) {
             query.roomCount = {
                 gte: +roomCount
-            }
+            };
         }
 
         if (bathroomCount) {
             query.bathroomCount = {
                 gte: +bathroomCount
-            }
+            };
         }
         
         if (guestCount) {
             query.guestCount = {
                 gte: +guestCount
-            }
+            };
         }
         
         if (locationValue) {
@@ -74,12 +79,22 @@ export default async function getListings(
                         ]
                     }
                 }
+            };
+        }
+
+        if (minPrice !== undefined || maxPrice !== undefined) {
+            query.price = {};
+            if (minPrice !== undefined) {
+                query.price.gte = +minPrice;
+            }
+            if (maxPrice !== undefined) {
+                query.price.lte = +maxPrice;
             }
         }
 
         const listings = await prisma.listing.findMany({
             include: {
-                reservations:true
+                reservations: true
             },
             where: query,
             orderBy: {

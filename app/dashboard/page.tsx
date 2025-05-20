@@ -1,12 +1,19 @@
 import EmptyState from "../components/EmptyState";
 import ClientOnly from "../components/ClientOnly";
-
 import getCurrentUser from "../actions/getCurrentUser";
 import getListings from "../actions/getListings";
-import DashboardClient from "./DashboardClient"; 
+import DashboardClient from "./DashboardClient";
 import getReservations from "../actions/getReservation";
+import PriceRange from "../components/PriceRange"; // ADD
 
-const DashboardPage = async () => {
+interface DashboardPageProps {
+  searchParams: {
+    minPrice?: string;
+    maxPrice?: string;
+  }
+}
+
+const DashboardPage = async ({ searchParams }: DashboardPageProps) => {
   const currentUser = await getCurrentUser();
 
   if (!currentUser) {
@@ -20,10 +27,13 @@ const DashboardPage = async () => {
     );
   }
 
-  // Pass userId as the parameter to getReservations
   const reservations = await getReservations({ userId: currentUser.id });
 
-  const listings = await getListings({ userId: currentUser.id });
+  const listings = await getListings({
+    userId: currentUser.id,
+    minPrice: searchParams.minPrice ? +searchParams.minPrice : undefined,
+    maxPrice: searchParams.maxPrice ? +searchParams.maxPrice : undefined,
+  });
 
   if (listings.length === 0) {
     return (
@@ -38,11 +48,14 @@ const DashboardPage = async () => {
 
   return (
     <ClientOnly>
-      <DashboardClient
-        listings={listings}
-        currentUser={currentUser}
-        reservations={reservations}  // Pass reservations here
-      />
+      <div className="px-4">
+    
+        <DashboardClient
+          listings={listings}
+          currentUser={currentUser}
+      
+        />
+      </div>
     </ClientOnly>
   );
 };

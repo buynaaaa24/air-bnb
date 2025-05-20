@@ -14,9 +14,11 @@ export type safeReservation = Omit<
 > & {
     createdAt: string;
     startDate: string;
-    endDate : string;
+    endDate: string;
     listing: SafeListing;
-}
+    price: number;  // Ensure that price is included here
+};
+
 
 export type SafeUser = Omit<
     User,

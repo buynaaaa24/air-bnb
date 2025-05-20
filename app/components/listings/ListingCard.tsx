@@ -13,20 +13,24 @@ interface ListingCardProps {
   data: SafeListing;
   reservation?: safeReservation;
   onAction?: (id: string) => void;
+  onPayment?: (id: string) => void;
   disabled?: boolean;
   actionLabel?: string;
   actionId?: string;
   currentUser?: SafeUser | null;
+  showPaymentButton?: boolean;
 }
 
 const ListingCard: React.FC<ListingCardProps> = ({
   data,
   reservation,
   onAction,
+  onPayment,
   disabled,
   actionLabel,
   actionId = "",
-  currentUser
+  currentUser,
+  showPaymentButton = false,
 }) => {
   const router = useRouter();
   const { getByValue } = useCountries();
@@ -39,6 +43,15 @@ const ListingCard: React.FC<ListingCardProps> = ({
       if (disabled) return;
       onAction?.(actionId);
     }, [onAction, actionId, disabled]
+  );
+
+  const handlePayment = useCallback(
+    (e: React.MouseEvent<HTMLButtonElement>) => {
+      e.stopPropagation();
+      if (disabled) return;
+      router.push(`/payment/${actionId}`);
+    },
+    [router, actionId, disabled]
   );
 
   const price = useMemo(() => {
@@ -87,6 +100,8 @@ const ListingCard: React.FC<ListingCardProps> = ({
           <div className="font-semibold text-sm">{formattedPrice}</div>
           {!reservation && <div className="font-light text-xs">Өдрийн</div>}
         </div>
+
+        {/* Cancel button */}
         {onAction && actionLabel && (
           <Button
             disabled={disabled}
@@ -94,6 +109,17 @@ const ListingCard: React.FC<ListingCardProps> = ({
             label={actionLabel}
             onClick={handleCancel}
           />
+        )}
+
+        {/* Payment button */}
+        {showPaymentButton && reservation && (
+          <div onClick={(e) => e.stopPropagation()}>
+            <Button
+              small
+              label="төлбөр төлөх"
+              onClick={handlePayment}
+            />
+          </div>
         )}
       </div>
     </div>

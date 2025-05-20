@@ -1,11 +1,12 @@
 'use client'
 
 import { FieldErrors, FieldValues, UseFormRegister } from "react-hook-form";
-import { BiDollar } from "react-icons/bi";
+import { TbCurrencyTugrik } from "react-icons/tb";
+
 interface InputProps {
     id: string;
     label: string;
-    type?:string;
+    type?: string;
     disabled?: boolean;
     formatPrice?: boolean;
     required?: boolean;
@@ -25,8 +26,8 @@ const Input: React.FC<InputProps> = ({
 }) => {
     return (
         <div className="w-full relative">
-            {formatPrice &&(
-                <BiDollar
+            {formatPrice && (
+                <TbCurrencyTugrik
                     size={24}
                     className="
                         text-neutral-700
@@ -34,13 +35,12 @@ const Input: React.FC<InputProps> = ({
                         top-5
                         left-2
                     "
-
                 />
             )}
             <input 
                 id={id}
                 disabled={disabled}
-                {... register(id, { required})}
+                {...register(id, { required })}
                 placeholder=" "
                 type={type}
                 className={`
@@ -71,14 +71,14 @@ const Input: React.FC<InputProps> = ({
                     top-5
                     z-10
                     origin-[0]
-                    ${formatPrice ? 'left-9': 'left-4'}
+                    ${formatPrice ? 'left-9' : 'left-4'}
                     peer-placeholder-shown:scale-100
                     peer-placeholder-shown:translate-y-0
-                    peer-focus:scale0-75
+                    peer-focus:scale-75
                     peer-focus:-translate-y-4
-                    ${errors[id] ? 'text-rose-500': 'text-zinc-400'}
-                    `}
-                >
+                    ${errors[id] ? 'text-rose-500' : 'text-zinc-400'}
+                `}
+            >
                 {label}
             </label>
         </div>

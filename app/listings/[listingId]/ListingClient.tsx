@@ -24,7 +24,7 @@ const initialDateRange = {
 interface ListingClientProps {
     reservations?: safeReservation[];
     listing: SafeListing & {
-        user: SafeUser
+        user: SafeUser;
     };
     currentUser?: SafeUser | null;
 }
@@ -46,7 +46,7 @@ const ListingClient: React.FC<ListingClientProps> = ({
                 end: new Date(reservation.endDate)
             });
 
-            dates = [... dates, ... range];
+            dates = [...dates, ...range];
         });
 
         return dates;
@@ -56,53 +56,48 @@ const ListingClient: React.FC<ListingClientProps> = ({
     const [totalPrice, setTotalPrice] = useState(listing.price);
     const [dateRange, setDateRange] = useState<Range>(initialDateRange);
 
-    const onCreateReservation = useCallback(() => {
-        if(!currentUser) {
-            return loginModal.onOpen();
-        }
-
-        setIsLoading(true);
-
-        axios.post('/api/reservations', {
-            totalPrice,
-            startDate: dateRange.startDate,
-            endDate: dateRange.endDate,
-            listingId: listing?.id
-        })
-        .then(() => {
-            toast.success('Listing reserved');
-            setDateRange(initialDateRange);
-          
-            router.push('/trips');
-        })
-        .catch(() => {
-            toast.error('Something went wrong');
-        })
-        .finally(() => {
-            setIsLoading(false);
-        })
-    },[
-        totalPrice,
-        dateRange,
-        listing?.id,
-        router,
-        currentUser,
-        loginModal
-    ]);
-
+    // Calculate totalPrice when dateRange or listing.price changes
     useEffect(() => {
         if (dateRange.startDate && dateRange.endDate) {
             const dayCount = differenceInCalendarDays(dateRange.endDate, dateRange.startDate);
-            if(dayCount && listing.price) {
+            if (dayCount > 0) {
                 setTotalPrice(dayCount * listing.price);
-            } else
-            setTotalPrice(listing.price);
+            } else {
+                setTotalPrice(listing.price); // Default price if no date range is selected
+            }
         }
     }, [dateRange, listing.price]);
 
+    const onCreateReservation = useCallback(() => {
+  if (!currentUser) {
+    return loginModal.onOpen();
+  }
+
+  setIsLoading(true);
+
+  axios.post('/api/reservations', {
+    totalPrice,
+    startDate: dateRange.startDate,
+    endDate: dateRange.endDate,
+    listingId: listing?.id
+  })
+  .then((response) => {
+    const reservationId = response.data.id; // assuming API returns created reservation with id in data.id
+    setDateRange(initialDateRange); // Reset the date range after submission
+    router.push(`/payment?reservationId=${encodeURIComponent(reservationId)}&amount=${encodeURIComponent(totalPrice)}`);
+  })
+  .catch(() => {
+    toast.error('Something went wrong');
+  })
+  .finally(() => {
+    setIsLoading(false);
+  });
+}, [totalPrice, dateRange, listing?.id, router, currentUser, loginModal]);
+
     const category = useMemo(() => {
-        return categories.find((item) => 
-        item.label === listing.category);
+        return categories.find((item) =>
+            item.label === listing.category
+        );
     }, [listing.category]);
 
     return (
@@ -116,13 +111,7 @@ const ListingClient: React.FC<ListingClientProps> = ({
                         id={listing.id}
                         currentUser={currentUser}
                     />
-                    <div className="
-                        grid
-                        grid-cols-1
-                        md:grid-cols-7
-                        md:gap-10
-                        mt-6
-                    ">
+                    <div className="grid grid-cols-1 md:grid-cols-7 md:gap-10 mt-6">
                         <ListingInfo
                             user={listing.user}
                             category={category}
@@ -132,17 +121,10 @@ const ListingClient: React.FC<ListingClientProps> = ({
                             bathroomCount={listing.bathroomCount}
                             locationValue={listing.locationValue}
                         />
-                        <div
-                            className="
-                                order-first
-                                mb-10
-                                md:order-last
-                                md:col-span-3
-                                "
-                        >
-                            <ListingReservation 
+                        <div className="order-first mb-10 md:order-last md:col-span-3">
+                            <ListingReservation
                                 price={listing.price}
-                                totalPrice={totalPrice}
+                                totalPrice={totalPrice} // Pass updated totalPrice here
                                 onChangeDate={(value) => setDateRange(value)}
                                 dateRange={dateRange}
                                 onSubmit={onCreateReservation}
@@ -155,6 +137,6 @@ const ListingClient: React.FC<ListingClientProps> = ({
             </div>
         </Container>
     );
-}
+};
 
 export default ListingClient;

@@ -1,24 +1,30 @@
 'use client';
 
-import { TbBeach, TbMountain, TbPool } from "react-icons/tb";
 import Container from "../Container";
-import { GiBarn, GiBoatFishing, GiCactus, GiCastle, GiCaveEntrance, GiForestCamp, GiIsland, GiWindmill } from "react-icons/gi";
-import { MdOutlineVilla } from "react-icons/md";
 import CategoryBox from "../CategoryBox";
 import { usePathname, useSearchParams } from "next/navigation";
-import { FaSkiing } from "react-icons/fa";
+
+import { MdApartment, MdNaturePeople, MdOutlineVilla } from "react-icons/md";
+import { FaBuilding } from "react-icons/fa";
+import { GiWindmill, GiBoatFishing, GiCaveEntrance, GiCactus } from "react-icons/gi";
+import { TbMountain, TbPool } from "react-icons/tb";
 import { BsSnow } from "react-icons/bs";
 import { IoDiamond } from "react-icons/io5";
 
 export const categories = [
     {
-        label: 'Далайн эрэг',
-        icon: TbBeach,
-        description: 'Энэ үл хөдлөх хөрөнгө нь далайн эрэгт ойрхон!'
+        label: 'Орон сууц',
+        icon: MdApartment,
+        description: 'Энэ үл хөдлөх хөрөнгө нь орон сууцны зориулалттай!'
+    },
+    {
+        label: 'Оффис',
+        icon: FaBuilding,
+        description: 'Энэ үл хөдлөх хөрөнгө нь оффисын зориулалттай!'
     },
     {
         label: 'Ферм',
-        icon: GiWindmill    ,
+        icon: GiWindmill,
         description: 'Энэ байшин салхин тээрэмтэй!'
     },
     {
@@ -37,29 +43,14 @@ export const categories = [
         description: 'Энэ байшин усан сантай!'
     },
     {
-        label: 'Арал',
-        icon: GiIsland,
-        description: 'Энэ үл хөдлөх хөрөнгө арал дээр байдаг!'
-    },
-    {
         label: 'Гол',
         icon: GiBoatFishing,
         description: 'Энэ байшин голтой ойрхон!'
     },
     {
         label: 'Зугаалга',
-        icon: FaSkiing,
+        icon: MdNaturePeople,
         description: 'Энэ газар олон үйл ажиллагаа хийх боломжтой!'
-    },
-    {
-        label: 'Цайз',
-        icon: GiCastle,
-        description: 'Энэ үл хөдлөх хөрөнгө нь цайзад байдаг!'
-    },
-    {
-        label: 'Амралт',
-        icon: GiForestCamp,
-        description: 'Энэ газар кемп хийж болно!'
     },
     {
         label: 'Арктик',
@@ -77,16 +68,11 @@ export const categories = [
         description: 'Энэ байшин цөлд байдаг!'
     },
     {
-        label: 'Амбаар',
-        icon: GiBarn,
-        description: 'Амбаартай байшин!'
-    },
-    {
         label: 'Люкс',
         icon: IoDiamond,
         description: 'Тансаг зэрэглэлийн!'
     },
-]
+];
 
 const Categories = () => {
     const params = useSearchParams();
@@ -101,7 +87,7 @@ const Categories = () => {
 
     return (
         <Container>
-            <div 
+            <div
                 className="
                     pt-4
                     flex
@@ -122,6 +108,6 @@ const Categories = () => {
             </div>
         </Container>
     );
-}
+};
 
 export default Categories;
