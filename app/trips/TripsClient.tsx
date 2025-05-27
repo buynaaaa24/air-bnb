@@ -1,10 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useCallback, useState } from "react";
-import axios from "axios";
-import toast from "react-hot-toast";
-
+import { useState } from "react";
 import Container from "../components/Container";
 import Heading from "../components/Heading";
 import ListingCard from "../components/listings/ListingCard";
@@ -20,27 +17,12 @@ const TripsClient: React.FC<TripsClientProps> = ({
   currentUser,
 }) => {
   const router = useRouter();
-  const [deletingId, setDeletingId] = useState('');
+  const [loadingId, setLoadingId] = useState('');
 
-  const onCancel = useCallback((id: string) => {
-    setDeletingId(id);
-
-    axios.delete(`/api/reservations/${id}`)
-      .then(() => {
-        toast.success('Захиалга цуцлагдлаа');
-        router.refresh();
-      })
-      .catch((error) => {
-        toast.error(error?.response?.data?.error || 'Алдаа гарлаа');
-      })
-      .finally(() => {
-        setDeletingId('');
-      });
-  }, [router]);
-
-  function onPay(reservationId: string, amount: number) {
-    router.push(`/payment?reservationId=${reservationId}&amount=${amount}`);
-  }
+  const onViewDetails = (id: string) => {
+    setLoadingId(id);
+    router.push('/dashboard');
+  };
 
   return (
     <Container>
@@ -62,12 +44,11 @@ const TripsClient: React.FC<TripsClientProps> = ({
                   data={reservation.listing}
                   reservation={reservation}
                   actionId={reservation.id}
-                  onAction={onCancel}
-                  disabled={deletingId === reservation.id}
-                  actionLabel="Захиалга цуцлах"
+                  onAction={onViewDetails}
+                  disabled={loadingId === reservation.id}
+                  actionLabel="Дэлгэрэнгүй харах"
                   currentUser={currentUser}
                 />
-                
               </div>
             ))}
           </div>

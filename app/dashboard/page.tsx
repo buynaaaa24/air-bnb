@@ -4,7 +4,7 @@ import getCurrentUser from "../actions/getCurrentUser";
 import getListings from "../actions/getListings";
 import DashboardClient from "./DashboardClient";
 import getReservations from "../actions/getReservation";
-import PriceRange from "../components/PriceRange"; // ADD
+
 
 interface DashboardPageProps {
   searchParams: {

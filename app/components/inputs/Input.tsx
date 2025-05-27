@@ -4,14 +4,15 @@ import { FieldErrors, FieldValues, UseFormRegister } from "react-hook-form";
 import { TbCurrencyTugrik } from "react-icons/tb";
 
 interface InputProps {
-    id: string;
-    label: string;
-    type?: string;
-    disabled?: boolean;
-    formatPrice?: boolean;
-    required?: boolean;
-    register: UseFormRegister<FieldValues>,
-    errors: FieldErrors
+  id: string;
+  label: string;
+  type?: string;
+  disabled?: boolean;
+  formatPrice?: boolean;
+  required?: boolean;
+  register: UseFormRegister<FieldValues>;
+  errors: FieldErrors;
+  validation?: object; 
 }
 
 const Input: React.FC<InputProps> = ({
@@ -22,8 +23,10 @@ const Input: React.FC<InputProps> = ({
     formatPrice,
     register,
     required,
-    errors
+    errors,
+    validation // 👈 add this
 }) => {
+
     return (
         <div className="w-full relative">
             {formatPrice && (
@@ -40,7 +43,11 @@ const Input: React.FC<InputProps> = ({
             <input 
                 id={id}
                 disabled={disabled}
-                {...register(id, { required })}
+                {...register(id, {
+                    required,
+                    ...validation
+                })}
+
                 placeholder=" "
                 type={type}
                 className={`
@@ -61,6 +68,12 @@ const Input: React.FC<InputProps> = ({
                     ${errors[id] ? 'focus:border-rose-500' : 'focus:border-black'}
                 `}
             />
+            {errors[id] && (
+                <p className="text-rose-500 text-sm mt-1">
+                    {errors[id]?.message as string}
+                </p>
+            )}
+
             <label
                 className={`
                     absolute

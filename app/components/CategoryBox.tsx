@@ -7,16 +7,16 @@ import qs from "query-string";
 
 // Mapping Mongolian labels to English labels
 const categoryLabelMap: Record<string, string> = {
-  'Далайн эрэг': 'Beach',
-  'Ферм': 'Farm',
-  'Орчин үеийн': 'Modern',
-  'Хөдөө': 'Countryside',
-  'Усан сан': 'Pool',
-  'Арал': 'Island',
-  'Гол': 'Lake',
-  'Зугаалга': 'Skiing',
+  'Орон сууц': 'Орон сууц',
+  'Ферм': 'Ферм',
+  'Орчин үеийн': 'Орчин үеийн',
+  'Хөдөө': 'Хөдөө',
+  'Усан сан': 'Усан сан',
+
+  'Гол': 'Гол',
+  'Зугаалга': 'Зугаалга',
   'Цайз': 'Castle',
-  'Амралт': 'Camping',
+  'Амралт': 'Амралт',
   'Арктик': 'Arctic',
   'Агуй': 'Cave',
   'Цөл': 'Desert',

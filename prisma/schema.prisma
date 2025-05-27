@@ -68,19 +68,21 @@ model Listing {
 }
 
 model Reservation {
-  id         String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId     String   @db.ObjectId
-  listingId  String   @db.ObjectId
+  id         String    @id @default(auto()) @map("_id") @db.ObjectId
+  userId     String    @db.ObjectId
+  listingId  String   @db.ObjectId    // make optional
   startDate  DateTime
   endDate    DateTime
   totalPrice Int
-  createdAt  DateTime @default(now())
-  status     String   @default("pending") // status field with a default value
+  createdAt  DateTime  @default(now())
+  status     String    @default("pending")
 
-  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  listing  Listing   @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  user     User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  listing  Listing?   @relation(fields: [listingId], references: [id], onDelete: Cascade)
   payments Payment[]
 }
+
+
 
 model Payment {
   id            String   @id @default(auto()) @map("_id") @db.ObjectId

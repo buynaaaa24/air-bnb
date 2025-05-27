@@ -23,7 +23,7 @@ const ReservationsClient: React.FC<ReservationsClientProps> = ({
 
     const onSeeMore = (id: string) => {
         setLoadingId(id);
-        router.push('/dashboard'); // Change to your actual dashboard route if needed
+        router.push('/dashboard'); 
     };
 
     return (

@@ -4,13 +4,13 @@ import ClientOnly from "./components/ClientOnly";
 import Container from "./components/Container";
 import EmptyState from "./components/EmptyState";
 import ListingCard from "./components/listings/ListingCard";
-
-
+import SlideshowWrapper from "./components/SlideshowWrapper";
 
 interface HomeProps {
   searchParams: IListingsParams
 }
-const Home = async ({searchParams}: HomeProps) => {
+
+const Home = async ({ searchParams }: HomeProps) => {
   const listings = await getListings(searchParams);
   const currentUser = await getCurrentUser();
 
@@ -22,12 +22,14 @@ const Home = async ({searchParams}: HomeProps) => {
     );
   }
 
-
   return (
     <ClientOnly>
+   
+      <SlideshowWrapper images={listings.map(listing => listing.imageSrc)} />
+
       <Container>
         <div className="
-          pt-36
+          pt-24
           grid
           grid-cols-1
           sm:grid-cols-2
@@ -46,6 +48,7 @@ const Home = async ({searchParams}: HomeProps) => {
           ))}
         </div>
       </Container>
+
     </ClientOnly>
   );
 }

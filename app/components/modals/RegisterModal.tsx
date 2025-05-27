@@ -23,7 +23,7 @@ const RegisterModal = () => {
     const registerModal = useRegisterModal();
     const loginModal = useLoginModal();
     const [isLoading, setIsLoading] = useState(false);
-    const [showTerms, setShowTerms] = useState(false); // local state for terms modal
+    const [showTerms, setShowTerms] = useState(false); 
 
     const {
         register,
@@ -43,7 +43,7 @@ const RegisterModal = () => {
         axios.post('/api/register', data)
             .then(() => {
                 toast.success('Амжилттай!');
-                setShowTerms(true); // show terms modal
+                setShowTerms(true); 
             })
             .catch(() => {
                 toast.error('Буруу!!!');
@@ -84,8 +84,16 @@ const RegisterModal = () => {
                 disabled={isLoading}
                 register={register}
                 errors={errors}
-                required
-            />
+                required={true}
+                validation={{
+                    minLength: {
+                    value: 8,
+                    message: "Нууц үг хамгийн багадаа 8 тэмдэгт байх ёстой"
+                    }
+                }}
+                />
+
+
         </div>
     );
 

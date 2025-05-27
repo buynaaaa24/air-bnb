@@ -205,7 +205,7 @@ const RentModal = () => {
             bodyContent = (
                 <div className="flex flex-col gap-8">
                     <Heading
-                        title="Гэрийнхээ зургийг оруулна уу"
+                        title="Байрны зургийг оруулна уу"
                         subtitle="Танайхийг илтгэх зургууд!"
                     />
                     <ImageUpload
@@ -220,7 +220,7 @@ const RentModal = () => {
             bodyContent = (
                 <div className="flex flex-col gap-8">
                     <Heading
-                        title="Та өөрийн гэрээ тодорхой дүрсэлвэл?"
+                        title="Та өөрийн байраа тодорхой дүрсэлвэл?"
                         subtitle="Товч, тодорхой байвал сайн!"
                     />
                     <Input
@@ -273,7 +273,7 @@ const RentModal = () => {
         actionLabel={actionLabel}
         secondaryActionLabel={secondaryActionLabel}
         secondaryAction={step === STEPS.CATEGORY ? undefined : onBack}
-        title="Гэрээ түрээслүүлэх!"
+        title="Байраа түрээслүүлэх!"
         body={bodyContent}
         />
      );
